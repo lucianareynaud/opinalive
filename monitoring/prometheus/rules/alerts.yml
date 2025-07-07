@@ -1,0 +1,80 @@
+groups:
+  - name: WhatsAppAlerts
+    rules:
+      # WhatsApp desconectado por mais de 5 minutos
+      - alert: WhatsAppDisconnected
+        expr: whatsapp_connection_status == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "WhatsApp Desconectado"
+          description: "O WhatsApp está desconectado há mais de 5 minutos. Clientes não podem enviar áudios!"
+
+      # Inatividade muito longa (4+ horas em horário comercial)
+      - alert: ExtendedInactivity
+        expr: |
+          (time() - whatsapp_last_message_timestamp > 14400) and
+          whatsapp_connection_status == 1 and
+          (hour() >= 8 and hour() < 18) and
+          (day_of_week() >= 1 and day_of_week() <= 5)
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Inatividade Prolongada"
+          description: "Nenhuma mensagem recebida nas últimas 4 horas durante horário comercial, mas WhatsApp está conectado. Verificar se está tudo funcionando."
+
+      # Taxa de erro alta no processamento (>20% em 15min)
+      - alert: HighErrorRate
+        expr: |
+          rate(audio_processing_total{status="error"}[15m]) /
+          rate(audio_processing_total{status=~"error|success"}[15m]) > 0.2
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Alta Taxa de Erro"
+          description: "Mais de 20% dos áudios estão falhando no processamento nos últimos 15 minutos!"
+
+      # Tempo de processamento muito alto (>2min)
+      - alert: SlowProcessing
+        expr: |
+          rate(audio_processing_duration_seconds_sum[5m]) /
+          rate(audio_processing_duration_seconds_count[5m]) > 120
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Processamento Lento"
+          description: "O tempo médio de processamento está acima de 2 minutos. Clientes esperando muito!"
+
+      # Muitas reconexões em pouco tempo (>5 em 1h)
+      - alert: FrequentReconnections
+        expr: increase(whatsapp_reconnect_total[1h]) > 5
+        labels:
+          severity: critical
+        annotations:
+          summary: "Reconexões Frequentes"
+          description: "Mais de 5 reconexões do WhatsApp na última hora. Possível problema de estabilidade!"
+
+      # Uso excessivo da API OpenAI (custo)
+      - alert: HighAPIUsage
+        expr: rate(audio_processing_total{status="success"}[5m]) * 300 > 50
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Alto Uso da API"
+          description: "Taxa de processamento atual pode gerar custos elevados com a API da OpenAI!"
+
+      # Falhas consecutivas de processamento
+      - alert: ConsecutiveFailures
+        expr: |
+          count_over_time(audio_processing_total{status="error"}[10m]) >= 3 and
+          count_over_time(audio_processing_total{status="success"}[10m]) == 0
+        labels:
+          severity: critical
+        annotations:
+          summary: "Falhas Consecutivas"
+          description: "3 ou mais falhas consecutivas de processamento sem nenhum sucesso nos últimos 10 minutos!" 

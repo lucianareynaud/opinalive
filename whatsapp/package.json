@@ -1,0 +1,19 @@
+{
+    "name": "opina-whatsapp",
+    "version": "1.0.0",
+    "type": "module",
+    "private": true,
+    "description": "WhatsApp integration for Opina",
+    "main": "baileys-listener.js",
+    "scripts": {
+        "start": "node baileys-listener.js"
+    },
+    "dependencies": {
+        "@hapi/boom": "^10.0.1",
+        "@whiskeysockets/baileys": "^6.5.0",
+        "axios": "^1.6.2",
+        "pino": "^8.16.2",
+        "pino-pretty": "^10.2.3",
+        "qrcode-terminal": "^0.12.0"
+    }
+}

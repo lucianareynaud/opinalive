@@ -1,0 +1,10 @@
+apiVersion: 1
+
+notifiers:
+  - name: Email
+    type: email
+    uid: email
+    org_id: 1
+    is_default: true
+    settings:
+      addresses: opinalive@gmail.com 

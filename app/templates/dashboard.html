@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dashboard - Opina</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-cloud@1.2.5/build/d3.layout.cloud.min.js"></script>
+</head>
+<body class="bg-gray-50">
+
+<!-- Header -->
+<div class="gradient-bg shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-8">
+            <div class="flex items-center">
+                <h1 class="text-3xl font-bold text-white">Dashboard</h1>
+            </div>
+            <div class="flex items-center space-x-6">
+                <div class="flex items-center space-x-3">
+                    <div class="h-10 w-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white text-lg font-semibold border-2 border-white/30">
+                        J
+                    </div>
+                    <div>
+                        <p class="text-base font-semibold text-white">João Silva</p>
+                        <p class="text-sm text-white/80">Plano Pro</p>
+                    </div>
+                </div>
+                <a href="/auth/logout" class="text-sm text-white/80 hover:text-white px-4 py-2 rounded-full border border-white/30 hover:bg-white/10 transition-all duration-300">
+                    Sair
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="space-y-8">
+        <!-- Cards de Resumo -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Total de Feedbacks -->
+            <div class="bg-white rounded-lg shadow p-6 card-hover">
+                <h3 class="text-lg font-semibold text-gray-700">Total de Feedbacks</h3>
+                <p class="text-3xl font-bold text-blue-600">128</p>
+            </div>
+            
+            <!-- Média de Estrelas -->
+            <div class="bg-white rounded-lg shadow p-6 card-hover">
+                <h3 class="text-lg font-semibold text-gray-700">Média de Estrelas</h3>
+                <p class="text-3xl font-bold text-yellow-500">4.5 ⭐</p>
+            </div>
+            
+            <!-- Elogios -->
+            <div class="bg-white rounded-lg shadow p-6 card-hover">
+                <h3 class="text-lg font-semibold text-gray-700">Elogios</h3>
+                <p class="text-3xl font-bold text-green-600">89</p>
+            </div>
+            
+            <!-- Reclamações -->
+            <div class="bg-white rounded-lg shadow p-6 card-hover">
+                <h3 class="text-lg font-semibold text-gray-700">Reclamações</h3>
+                <p class="text-3xl font-bold text-red-600">12</p>
+            </div>
+        </div>
+
+        <!-- Grid Principal -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Coluna da Esquerda -->
+            <div class="space-y-8">
+                <!-- Elogios -->
+                <div class="bg-white rounded-lg shadow p-6 card-hover">
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">Elogios Destacados</h2>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <p class="text-green-800">"Atendimento excelente, muito atencioso e rápido!"</p>
+                            <div class="mt-2 text-sm text-green-600">
+                                ⭐⭐⭐⭐⭐
+                                <span class="ml-2 px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Destaque</span>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <p class="text-green-800">"Produto de ótima qualidade, superou minhas expectativas!"</p>
+                            <div class="mt-2 text-sm text-green-600">
+                                ⭐⭐⭐⭐⭐
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nuvem de Palavras -->
+                <div class="bg-white rounded-lg shadow p-6 card-hover">
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">Tópicos Mencionados</h2>
+                    <div id="wordcloud" class="w-full h-64"></div>
+                </div>
+
+                <!-- Emoções -->
+                <div class="bg-white rounded-lg shadow p-6 card-hover">
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">Emoções Identificadas</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                            <span class="text-purple-800">Satisfação</span>
+                            <span class="text-purple-600 font-semibold">45</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                            <span class="text-purple-800">Alegria</span>
+                            <span class="text-purple-600 font-semibold">32</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                            <span class="text-purple-800">Gratidão</span>
+                            <span class="text-purple-600 font-semibold">28</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                            <span class="text-purple-800">Entusiasmo</span>
+                            <span class="text-purple-600 font-semibold">15</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coluna da Direita -->
+            <div class="space-y-8">
+                <!-- Reclamações -->
+                <div class="bg-white rounded-lg shadow p-6 card-hover">
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">Pontos de Atenção</h2>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-red-50 rounded-lg">
+                            <p class="text-red-800">"Demora na entrega, precisei entrar em contato várias vezes."</p>
+                            <div class="mt-2 flex items-center justify-between">
+                                <div class="text-sm text-red-600">
+                                    ⭐⭐
+                                </div>
+                                <span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">Urgente</span>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-red-50 rounded-lg">
+                            <p class="text-red-800">"Produto veio com pequeno defeito na embalagem."</p>
+                            <div class="mt-2 flex items-center justify-between">
+                                <div class="text-sm text-red-600">
+                                    ⭐⭐⭐
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Áreas de Melhoria -->
+                <div class="bg-white rounded-lg shadow p-6 card-hover">
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">Áreas para Melhoria</h2>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
+                            <span class="text-orange-800">Logística</span>
+                            <span class="px-2 py-1 bg-orange-100 text-orange-800 rounded-full text-sm">8 menções</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
+                            <span class="text-orange-800">Embalagem</span>
+                            <span class="px-2 py-1 bg-orange-100 text-orange-800 rounded-full text-sm">5 menções</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
+                            <span class="text-orange-800">Atendimento</span>
+                            <span class="px-2 py-1 bg-orange-100 text-orange-800 rounded-full text-sm">3 menções</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Produtos/Serviços -->
+                <div class="bg-white rounded-lg shadow p-6 card-hover">
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">Produtos/Serviços Mencionados</h2>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                            <span class="text-blue-800">Produto A</span>
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">45x</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                            <span class="text-blue-800">Serviço B</span>
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">32x</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                            <span class="text-blue-800">Produto C</span>
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">28x</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ações Sugeridas -->
+                <div class="bg-white rounded-lg shadow p-6 card-hover">
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">Ações Sugeridas</h2>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li class="text-gray-700">Revisar processo de logística para reduzir tempo de entrega</li>
+                        <li class="text-gray-700">Melhorar qualidade das embalagens</li>
+                        <li class="text-gray-700">Implementar sistema de notificação de status do pedido</li>
+                        <li class="text-gray-700">Treinar equipe de atendimento para casos específicos</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção de Configurações da Conta -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Configurações da Conta</h3>
+            
+            {% if user.plan_type == 'pro' %}
+            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg mb-4">
+                <div>
+                    <p class="text-sm font-medium text-gray-900">Plano PRO Ativo</p>
+                    <p class="text-sm text-gray-600">Próxima cobrança: {{ subscription.current_period_end.strftime('%d/%m/%Y') }}</p>
+                </div>
+                <a href="/cancelar-assinatura" class="text-sm text-red-600 hover:text-red-800">
+                    Cancelar Assinatura
+                </a>
+            </div>
+            {% endif %}
+            
+            <div class="space-y-4">
+                <!-- Outras configurações aqui -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Dados mockados para a nuvem de palavras
+    const words = [
+        {text: "Atendimento", value: 64},
+        {text: "Qualidade", value: 48},
+        {text: "Entrega", value: 32},
+        {text: "Produto", value: 28},
+        {text: "Rapidez", value: 24},
+        {text: "Preço", value: 20},
+        {text: "Embalagem", value: 18},
+        {text: "Satisfação", value: 16},
+        {text: "Excelente", value: 14},
+        {text: "Recomendo", value: 12}
+    ];
+    
+    // Configuração do layout
+    const layout = d3.layout.cloud()
+        .size([500, 250])
+        .words(words)
+        .padding(5)
+        .rotate(() => 0)
+        .font("Inter")
+        .fontSize(d => Math.sqrt(d.value) * 10)
+        .on("end", draw);
+
+    function draw(words) {
+        d3.select("#wordcloud").append("svg")
+            .attr("width", "100%")
+            .attr("height", "100%")
+            .attr("viewBox", "0 0 500 250")
+            .append("g")
+            .attr("transform", "translate(250,125)")
+            .selectAll("text")
+            .data(words)
+            .enter().append("text")
+            .style("font-size", d => `${d.size}px`)
+            .style("font-family", "Inter")
+            .style("fill", () => d3.interpolateBlues(Math.random()))
+            .attr("text-anchor", "middle")
+            .attr("transform", d => `translate(${d.x},${d.y})rotate(${d.rotate})`)
+            .text(d => d.text);
+    }
+
+    layout.start();
+</script>
+
+</body>
+</html> 

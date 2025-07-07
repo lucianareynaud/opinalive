@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Pagamento Confirmado - Opina</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <div class="gradient-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-6">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-white">Opina</a>
+                </div>
+                <nav class="flex space-x-8">
+                    <a href="/dashboard" class="text-sm text-white/80 hover:text-white">Dashboard</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div class="min-h-[80vh] flex items-center justify-center">
+        <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12">
+                <div class="mb-8">
+                    <div class="mx-auto h-16 w-16 bg-green-100 rounded-full flex items-center justify-center">
+                        <svg class="h-10 w-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <h2 class="mt-6 text-3xl font-extrabold text-gray-900">Pagamento Confirmado!</h2>
+                    <p class="mt-4 text-lg text-gray-600">
+                        Seu plano PRO foi ativado com sucesso. Agora você tem acesso a todos os recursos premium.
+                    </p>
+                </div>
+
+                <div class="bg-gray-50 rounded-xl p-6 mb-8">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Próximos passos:</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 h-6 w-6 text-green-500">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </span>
+                            <span class="ml-3 text-gray-600">Configure seu perfil e preferências</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 h-6 w-6 text-green-500">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </span>
+                            <span class="ml-3 text-gray-600">Crie seu primeiro link de feedback</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 h-6 w-6 text-green-500">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </span>
+                            <span class="ml-3 text-gray-600">Personalize sua página de feedback</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="flex flex-col space-y-4">
+                    <a href="/dashboard" class="inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                        Ir para o Dashboard
+                        <svg class="ml-2 -mr-1 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                        </svg>
+                    </a>
+                    <a href="/ajuda" class="text-sm text-gray-600 hover:text-gray-900">
+                        Precisa de ajuda? Entre em contato com nosso suporte
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-50 border-t border-gray-200 py-8 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-gray-500 text-sm">
+                &copy; 2024 Opina. Todos os direitos reservados.
+            </p>
+        </div>
+    </footer>
+</body>
+</html> 
